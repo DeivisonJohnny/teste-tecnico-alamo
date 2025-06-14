@@ -1,4 +1,6 @@
-import { ReactNode } from "react";
+"use client";
+
+import { ReactNode, useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 
@@ -7,13 +9,17 @@ interface Props {
 }
 
 export default function Layout({ children }: Props) {
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+  const closeSidebar = () => setSidebarOpen(false);
   return (
-    <>
-      <Sidebar />
-      <div className=" w-[calc(100%_-_240px)] relative min-h-[100vh] left-60">
-        <Header />
-        {children}
+    <div className="flex h-screen overflow-hidden w-full">
+      <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
+      <div className="flex flex-col flex-1">
+        <Header onToggleSidebar={toggleSidebar} />
+        <main className="p-4 overflow-y-auto relative ">{children}</main>
       </div>
-    </>
+    </div>
   );
 }
