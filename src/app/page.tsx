@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Filter, Plus, Search } from "lucide-react";
+import { Filter, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { RoutineCard } from "@/components/RoutineCard";
@@ -31,27 +31,6 @@ export default function Home() {
 
   const handleSearch = () => {
     setHasSearched(true);
-  };
-
-  const handleAddRoutine = async (data: Routine) => {
-    try {
-      const response = await fetch("/api/routines", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        const newRoutine = await response.json();
-        setRoutines((prev) => (prev ? [newRoutine, ...prev] : [newRoutine]));
-      } else {
-        console.error("Erro ao registrar procedimento");
-      }
-    } catch (error) {
-      console.error("Erro ao enviar procedimento:", error);
-    }
   };
 
   const filteredRoutines = hasSearched
