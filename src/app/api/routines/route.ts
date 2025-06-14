@@ -7,7 +7,7 @@ export type Measurement = {
   mAU: string;
 };
 
-export type Procedure = {
+export type Routine = {
   time: string;
   title: string;
   solution: string;
@@ -21,7 +21,7 @@ export type Procedure = {
 };
 
 export async function GET() {
-  const procedures = [
+  const routines = [
     {
       time: "10:00",
       title: "Procedimento Matinal",
@@ -66,5 +66,5 @@ export async function GET() {
     },
   ];
 
-  return NextResponse.json(procedures);
+  return NextResponse.json(routines);
 }

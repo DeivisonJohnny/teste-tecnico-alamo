@@ -1,8 +1,6 @@
 "use client";
 
-import type React from "react";
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { Plus, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -19,11 +17,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Procedure } from "@/app/api/procedures/route";
+
+import { useRoutineStore } from "@/app/stores/useNewRoutine";
+import { Routine } from "@/app/api/routines/route";
 
 export default function NewRoutineModal() {
   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState<Procedure>({
+
+  const addRoutine = useRoutineStore((state) => state.addRoutine);
+
+  const [formData, setFormData] = useState<Routine>({
     time: "",
     title: "",
     solution: "",
@@ -39,7 +42,7 @@ export default function NewRoutineModal() {
     },
   });
 
-  const handleInputChange = (field: keyof Procedure, value: string) => {
+  const handleInputChange = (field: keyof Routine, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -47,7 +50,7 @@ export default function NewRoutineModal() {
   };
 
   const handleMeasurementChange = (
-    field: keyof Procedure["measurements"],
+    field: keyof Routine["measurements"],
     value: string
   ) => {
     setFormData((prev) => ({
@@ -87,9 +90,14 @@ export default function NewRoutineModal() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Procedure Data:", formData);
+
+    // Salva os dados no Zustand (global)
+    addRoutine(formData);
+
+    // Fecha o modal
     setOpen(false);
 
+    // Reseta o formulário
     setFormData({
       time: "",
       title: "",
@@ -108,15 +116,16 @@ export default function NewRoutineModal() {
   };
 
   return (
-    <div className="flex items-center justify-center  bg-gray-50">
+    <div className="flex items-center justify-center bg-gray-50">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button className="bg-[#675DFF] hover:bg-purple-700 text-white text-[14px] flex items-center gap-2 font-medium">
             <Plus className="w-4 h-4" color="#fff" />
-            Adicionar Rotina{" "}
+            Adicionar Rotina
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto scroll-none">
           <DialogHeader>
             <DialogTitle>Registro de Procedimento</DialogTitle>
             <DialogDescription>
@@ -124,7 +133,7 @@ export default function NewRoutineModal() {
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6 scroll-none">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="time">Horário</Label>

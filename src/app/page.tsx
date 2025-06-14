@@ -4,26 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Filter, Plus, Search } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Procedure } from "./api/procedures/route";
+
 import { RoutineCard } from "@/components/RoutineCard";
 import { useFilterStore } from "./stores/FilterStore";
 import NewRoutineModal from "@/components/Modal/NewRoutineModal";
+import { Routine } from "./api/routines/route";
 
 export default function Home() {
-  const [procedures, setProcedures] = useState<Procedure[] | null>(null);
+  const [routines, setRoutines] = useState<Routine[] | null>(null);
   const { searchTerm, setSearchTerm } = useFilterStore();
   const [hasSearched, setHasSearched] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    fetchProcedures();
+    fetchRoutines();
   }, []);
 
-  const fetchProcedures = async () => {
+  const fetchRoutines = async () => {
     try {
-      const response = await fetch("/api/procedures");
+      const response = await fetch("/api/routines");
       const data = await response.json();
-      setProcedures(data);
+      setRoutines(data);
     } catch (error) {
       console.log("Erro ao buscar procedimentos:", error);
     }
@@ -33,9 +33,9 @@ export default function Home() {
     setHasSearched(true);
   };
 
-  const handleAddRoutine = async (data: Procedure) => {
+  const handleAddRoutine = async (data: Routine) => {
     try {
-      const response = await fetch("/api/procedures", {
+      const response = await fetch("/api/routines", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,11 +44,8 @@ export default function Home() {
       });
 
       if (response.ok) {
-        const newProcedure = await response.json();
-        setProcedures((prev) =>
-          prev ? [newProcedure, ...prev] : [newProcedure]
-        );
-        setModalOpen(false);
+        const newRoutine = await response.json();
+        setRoutines((prev) => (prev ? [newRoutine, ...prev] : [newRoutine]));
       } else {
         console.error("Erro ao registrar procedimento");
       }
@@ -57,8 +54,8 @@ export default function Home() {
     }
   };
 
-  const filteredProcedures = hasSearched
-    ? procedures?.filter((proc) => {
+  const filteredRoutines = hasSearched
+    ? routines?.filter((proc) => {
         const term = searchTerm.toLowerCase();
         return (
           proc.title.toLowerCase().includes(term) ||
@@ -68,7 +65,7 @@ export default function Home() {
           proc.note?.toLowerCase().includes(term)
         );
       })
-    : procedures;
+    : routines;
 
   return (
     <main className="flex-1 p-6">
@@ -80,14 +77,13 @@ export default function Home() {
           <NewRoutineModal />
         </div>
 
-        <div className="bg-white z-[10] flex items-center space-x-4 mb-6 border-b-[1px] border-[#E4E4E4] py-[10px] sticky top-[59px] px-[20px]">
+        <div className="bg-white z-[10] flex items-center space-x-4 mb-6 border-b-[1px] border-[#E4E4E4] py-[15px] sticky top-[57px] px-[20px]">
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#414552] w-4 h-4" />
             <Input
               className="pl-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Buscar por título, solução, compostos..."
             />
           </div>
           <Button
@@ -106,8 +102,8 @@ export default function Home() {
         </div>
 
         <div className="w-full flex gap-[10px] flex-col z-[5] px-[2px]">
-          {filteredProcedures?.length ? (
-            filteredProcedures.map((item, index) => (
+          {filteredRoutines?.length ? (
+            filteredRoutines.map((item, index) => (
               <RoutineCard
                 key={index}
                 {...item}

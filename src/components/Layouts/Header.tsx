@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Header() {
   return (
-    <header className="sticky top-0  bg-white border-b border-gray-200 px-6 py-4 z-10">
+    <header className="sticky top-0  bg-white px-6 py-4 z-10">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2 text-sm text-gray-600  font-semibold tracking-[0.4px] ">
           <span>Cadastros</span>

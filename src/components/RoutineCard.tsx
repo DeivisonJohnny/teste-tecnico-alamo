@@ -1,7 +1,7 @@
-import { Procedure } from "@/app/api/procedures/route";
+import { Routine } from "@/app/api/routines/route";
 import { Card, CardContent } from "./ui/card";
 
-interface RoutineCardProps extends Procedure {
+interface RoutineCardProps extends Routine {
   indice: number;
   searchTerm: string;
 }
@@ -23,7 +23,7 @@ function highlight(text: string, term: string) {
 export function RoutineCard({
   indice,
   searchTerm,
-  ...dataProcedure
+  ...dataRoutine
 }: RoutineCardProps) {
   const bgColor = indice % 2 === 0 ? "bg-white" : "bg-[#f5f6f8]";
 
@@ -34,38 +34,38 @@ export function RoutineCard({
           <div className="flex flex-col ">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
               {highlight(
-                `${dataProcedure.time} - ${dataProcedure.title}`,
+                `${dataRoutine.time} - ${dataRoutine.title}`,
                 searchTerm
               )}
             </h3>
 
             <div className="flex flex-col gap-2 text-sm text-[#414552] ml-4 font-medium">
-              <p>{highlight(dataProcedure.solution, searchTerm)}</p>
+              <p>{highlight(dataRoutine.solution, searchTerm)}</p>
 
-              {dataProcedure.compounds.map((compound, idx) => (
+              {dataRoutine.compounds.map((compound, idx) => (
                 <p key={idx}>{highlight(compound, searchTerm)}</p>
               ))}
 
-              {dataProcedure.observation && (
+              {dataRoutine.observation && (
                 <p>
                   {highlight(
-                    `Observação: ${dataProcedure.observation}`,
+                    `Observação: ${dataRoutine.observation}`,
                     searchTerm
                   )}
                 </p>
               )}
-              {dataProcedure.catalyst && (
-                <p className="ml-4">{dataProcedure.catalyst}</p>
+              {dataRoutine.catalyst && (
+                <p className="ml-4">{dataRoutine.catalyst}</p>
               )}
-              {dataProcedure.stabilizer && (
-                <p className="ml-4">{dataProcedure.stabilizer}</p>
+              {dataRoutine.stabilizer && (
+                <p className="ml-4">{dataRoutine.stabilizer}</p>
               )}
-              {dataProcedure.control && (
-                <p className="ml-4">{dataProcedure.control}</p>
+              {dataRoutine.control && (
+                <p className="ml-4">{dataRoutine.control}</p>
               )}
-              {dataProcedure.note && (
+              {dataRoutine.note && (
                 <p className="text-[#898383] text-[12px]">
-                  {highlight(dataProcedure.note, searchTerm)}
+                  {highlight(dataRoutine.note, searchTerm)}
                 </p>
               )}
             </div>
@@ -73,16 +73,16 @@ export function RoutineCard({
 
           <div className="flex flex-col gap-[25px] text-sm">
             <div className="text-gray-600">
-              CHO: {dataProcedure.measurements.CHO}
+              CHO: {dataRoutine.measurements.CHO}
             </div>
             <div className="text-gray-600">
-              PTN: {dataProcedure.measurements.PTN}
+              PTN: {dataRoutine.measurements.PTN}
             </div>
             <div className="text-gray-600">
-              LIP: {dataProcedure.measurements.LIP}
+              LIP: {dataRoutine.measurements.LIP}
             </div>
             <div className="text-purple-600 font-medium">
-              {dataProcedure.measurements.mAU}
+              {dataRoutine.measurements.mAU}
             </div>
           </div>
         </div>

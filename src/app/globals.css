@@ -119,4 +119,9 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  .scroll-none::-webkit-scrollbar {
+    display: none;
+    width: 0px;
+  }
 }
